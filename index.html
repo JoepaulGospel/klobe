@@ -6,195 +6,259 @@
 <title>KLOBE | Command Center</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-body { background-color: #0A0C10; color: #cbd5e1; font-family: 'Inter', sans-serif; overflow: hidden; }
-.glass { background: rgba(13, 17, 23, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.05); }
-.sidebar-item { transition: all 0.2s ease; border-radius: 12px; margin-bottom: 4px; }
-.sidebar-item:hover { background: rgba(255,255,255,0.05); color: white; }
-.sidebar-active { background: #2563eb !important; color: white !important; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3); }
+:root { --kb-orange: #FF8C00; } /* Kodeblock Identity Color */
+body {
+background-color: #000000;
+color: #FFFFFF;
+font-family: 'Inter', -apple-system, sans-serif;
+overflow: hidden;
+-webkit-font-smoothing: antialiased;
+}
+.apple-glass {
+background: rgba(10, 10, 10, 0.4);
+backdrop-filter: blur(25px);
+-webkit-backdrop-filter: blur(25px);
+border: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+.nav-item {
+transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+border-radius: 8px;
+}
+.nav-active {
+background: rgba(255, 255, 255, 0.05);
+color: white !important;
+}
+.dono-iris {
+position: relative;
+cursor: pointer;
+transition: transform 0.4s ease;
+}
+.dono-iris:hover { transform: scale(1.05); }
+.dono-iris::before {
+content: '';
+position: absolute;
+inset: -10px;
+background: radial-gradient(circle, rgba(255,140,0,0.1) 0%, transparent 70%);
+animation: pulse-glow 4s infinite;
+}
+@keyframes pulse-glow {
+0%, 100% { opacity: 0.3; }
+50% { opacity: 0.8; }
+}
+.hidden { display: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
-@keyframes pulse-glow { 0% { transform: scale(1); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(1); opacity: 0.5; } }
-.dono-glow { animation: pulse-glow 4s infinite; }
+input::placeholder { color: #333; }
 </style>
 </head>
 <body class="flex h-screen w-full">
-<!-- 1. IDENTITY & NAVIGATION (LEFT) -->
-<aside class="w-72 border-r border-white/5 bg-[#0D1117] flex flex-col h-full z-20">
-<div class="p-8">
-<h2 class="text-2xl font-black italic tracking-tighter text-white">KLOBE</h2>
+<!-- 1. NAVIGATION (LEFT COLUMN) -->
+<aside class="w-64 flex flex-col h-full border-r border-white/5 bg-[#000000] z-30">
+<div class="p-10 pb-16">
+<h2 class="text-xl font-black italic tracking-tighter text-white">KLOBE</h2>
 </div>
-<nav class="flex-1 px-4 overflow-y-auto no-scrollbar">
-<section class="mb-8">
-<p class="text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em] mb-4 ml-2">The Nexus</p>
-<button onclick="switchContext('General', 'nexus')" id="nav-General" class="sidebar-item sidebar-active w-full flex items-center gap-3 px-4 py-3 text-sm font-bold">
-<i data-lucide="users" size="18"></i> General
-</button>
-<button onclick="switchContext('DONO AI', 'private')" id="nav-DONO" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-blue-400">
-<i data-lucide="cpu" size="18"></i> Private: DONO
-</button>
-</section>
-<section class="mb-8">
-<p class="text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em] mb-4 ml-2">Project Cells</p>
-<button onclick="switchContext('KOLD', 'nexus')" id="nav-KOLD" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 text-sm font-bold">
-<i data-lucide="code" size="18"></i> KOLD
-</button>
-<button onclick="switchContext('BEAM', 'nexus')" id="nav-BEAM" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-emerald-500">
-<i data-lucide="zap" size="18"></i> BEAM
-</button>
-<button onclick="switchContext('SKYBLOCK', 'nexus')" id="nav-SKYBLOCK" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-rose-500">
-<i data-lucide="plane" size="18"></i> SKYBLOCK
-</button>
-</section>
+<nav class="flex-1 px-4 space-y-10 overflow-y-auto no-scrollbar">
+<!-- MESSAGES SECTION -->
 <section>
-<button onclick="switchView('academy')" id="nav-Academy" class="sidebar-item w-full flex items-center gap-3 px-4 py-3 text-sm font-bold text-zinc-400 border-t border-white/5 pt-6 mt-4">
-<i data-lucide="book-open" size="18"></i> Academy Portal
+<p class="text-[9px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-4 ml-3">Messages</p>
+<button onclick="switchContext('General', 'Messages')" id="nav-General" class="nav-item nav-active w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-zinc-500">
+<i data-lucide="hash" size="14"></i> General
+</button>
+<button onclick="switchContext('KOLD', 'Messages')" id="nav-KOLD" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-zinc-500">
+<i data-lucide="code" size="14"></i> KOLD
+</button>
+<button onclick="switchContext('BEAM', 'Messages')" id="nav-BEAM" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-zinc-500">
+<i data-lucide="zap" size="14"></i> BEAM
+</button>
+</section>
+<!-- DMs SECTION -->
+<section>
+<p class="text-[9px] font-black text-zinc-700 uppercase tracking-[0.3em] mb-4 ml-3">DMs</p>
+<button onclick="switchContext('DONO', 'DMs')" id="nav-DONO" class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-zinc-500">
+<i data-lucide="cpu" size="14"></i> DONO
+</button>
+<button class="nav-item w-full flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-zinc-500 opacity-30">
+<i data-lucide="plus" size="14"></i> New DM
+</button>
+</section>
+<!-- UPSKILL -->
+<section class="pt-8 border-t border-white/5">
+<button onclick="switchView('upskill')" id="nav-Upskill" class="nav-item w-full flex items-center gap-3 px-4 py-3 text-[13px] font-bold text-zinc-400">
+<i data-lucide="star" size="14"></i> Upskill
 </button>
 </section>
 </nav>
-<!-- USER STATUS -->
-<div class="p-6 bg-black/20 border-t border-white/5 flex items-center gap-3">
-<div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center font-bold text-white italic shadow-lg shadow-blue-600/20">G</div>
+<!-- USER IDENTITY (EDITABLE) -->
+<div class="p-6 mt-auto">
+<div class="flex items-center justify-between group">
+<div class="flex items-center gap-3 overflow-hidden">
+<div class="w-9 h-9 bg-zinc-900 border border-white/10 rounded-full flex items-center justify-center font-bold text-white text-xs italic">G</div>
 <div class="text-left overflow-hidden">
-<p id="display-uid" class="text-xs font-black text-white uppercase tracking-tighter truncate">Gospel#7721</p>
-<p class="text-[9px] text-green-500 font-bold uppercase tracking-widest flex items-center gap-1">
-<span class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span> Active
-</p>
+<input id="username-input" type="text" value="Gospel#7721" disabled class="bg-transparent text-[12px] font-black text-white uppercase tracking-tighter w-full outline-none disabled:cursor-default">
+<p class="text-[8px] text-green-500 font-bold uppercase tracking-[0.2em]">Live</p>
+</div>
+</div>
+<button onclick="toggleEditUsername()" id="edit-btn" class="text-zinc-600 hover:text-white transition-all"><i data-lucide="edit-3" size="12"></i></button>
 </div>
 </div>
 </aside>
-<!-- 2. OPERATIONS & CHAT (CENTER) -->
-<main id="main-ops" class="flex-1 flex flex-col relative bg-[#0A0C10] transition-all duration-300">
-<header class="h-16 border-b border-white/5 flex items-center justify-between px-8 bg-[#0D1117]/50 backdrop-blur-xl">
-<div class="flex items-center gap-4">
-<h3 id="current-header" class="font-black text-white uppercase italic tracking-tighter"># GENERAL</h3>
-<span id="header-tag" class="text-[9px] font-black bg-white/5 px-2 py-0.5 rounded text-zinc-500 uppercase tracking-widest">Team Nexus</span>
+<!-- 2. OPERATIONS AREA (CENTER COLUMN) -->
+<main id="main-view" class="flex-1 flex flex-col relative bg-[#000000]">
+<header class="h-14 flex items-center justify-between px-10">
+<div class="flex items-center gap-2">
+<span id="view-indicator" class="text-[10px] font-black text-zinc-800 uppercase tracking-widest">Messages</span>
+<h3 id="current-header" class="text-[13px] font-bold text-white tracking-tight uppercase"># General</h3>
 </div>
-<div class="flex gap-2">
-<button class="p-2 text-zinc-500 hover:text-white hover:bg-white/5 rounded-xl transition-all"><i data-lucide="video" size={18}></i></button>
-<button class="p-2 text-zinc-500 hover:text-white hover:bg-white/5 rounded-xl transition-all"><i data-lucide="phone" size={18}></i></button>
-<button class="p-2 text-zinc-500 hover:text-white hover:bg-white/5 rounded-xl transition-all ml-4"><i data-lucide="search" size={18}></i></button>
+<div class="flex items-center gap-6 text-zinc-600">
+<i data-lucide="video" class="hover:text-white cursor-pointer w-4 h-4"></i>
+<i data-lucide="phone" class="hover:text-white cursor-pointer w-4 h-4"></i>
 </div>
 </header>
-<!-- MESSAGE FEED -->
-<div id="chat-feed" class="flex-1 p-8 overflow-y-auto space-y-6 no-scrollbar">
-<!-- Simulated Messages -->
-<div class="flex gap-4">
-<div class="w-8 h-8 bg-zinc-800 rounded-lg flex-shrink-0 flex items-center justify-center text-[10px] font-bold">SD</div>
-<div>
-<div class="flex items-center gap-2 mb-1">
-<span class="text-xs font-black text-white">SeniorDev#4421</span>
-<span class="text-[9px] text-zinc-600 font-bold uppercase">10:42 AM</span>
-</div>
-<div class="bg-white/5 p-4 rounded-2xl rounded-tl-none border border-white/5 max-w-md text-sm leading-relaxed">
-The backend for <span class="text-blue-500 font-bold">The Ledger</span> is now fully synchronized with MT5. Gospel, check the calibration.
+<!-- MESSAGE INTERFACE -->
+<div id="chat-view" class="flex-1 flex flex-col overflow-hidden">
+<div id="chat-feed" class="flex-1 p-10 overflow-y-auto no-scrollbar flex flex-col justify-center items-center">
+<!-- Session Placeholder -->
+<div class="max-w-md w-full text-center">
+<p id="placeholder-text" class="text-[11px] font-medium text-zinc-700 uppercase tracking-[0.4em] leading-relaxed">
+Call on DONO AI using @DONO
+</p>
 </div>
 </div>
-</div>
-</div>
-<!-- INPUT BOX -->
-<div class="p-6 border-t border-white/5 px-10 bg-[#0A0C10]">
-<div class="flex gap-4 bg-[#161B22] p-2 rounded-2xl border border-white/5 shadow-2xl focus-within:border-blue-500/50 transition-all">
-<input id="chat-input" type="text" placeholder="Message..." class="flex-1 bg-transparent outline-none text-white font-medium px-4 py-2">
-<button onclick="sendMessage()" class="bg-blue-600 text-white p-3 rounded-xl hover:scale-105 transition-transform">
-<i data-lucide="send" size="18"></i>
+<!-- INPUT FIELD -->
+<div class="p-10 pt-0">
+<div class="max-w-3xl mx-auto flex items-center bg-[#0D1117] rounded-full px-6 py-3 border border-white/5 focus-within:border-white/20 transition-all">
+<input id="chat-input" type="text" placeholder="Start typing..." class="flex-1 bg-transparent outline-none text-sm text-white font-medium">
+<button onclick="sendMessage()" class="ml-4 text-white opacity-20 hover:opacity-100 transition-opacity">
+<i data-lucide="arrow-up" size="20"></i>
 </button>
 </div>
-<p class="text-[9px] text-zinc-600 font-bold uppercase mt-3 text-center tracking-[0.2em]">Tag <span class="text-blue-500">@DONO</span> for technical audit</p>
+</div>
+</div>
+<!-- UPSKILL VIEW (HIDDEN) -->
+<div id="upskill-view" class="hidden flex-1 overflow-y-auto p-12 no-scrollbar">
+<h2 class="text-3xl font-black text-white mb-10 tracking-tighter uppercase">Upskill</h2>
+<div class="grid grid-cols-2 gap-4">
+<div class="apple-glass p-8 rounded-3xl h-48 flex flex-col justify-between group cursor-pointer hover:bg-white/[0.02]">
+<span class="text-[9px] font-black uppercase text-blue-500 tracking-widest">Available</span>
+<h4 class="text-xl font-bold">Harvard CS50W</h4>
+</div>
+<div class="apple-glass p-8 rounded-3xl h-48 flex flex-col justify-between opacity-30">
+<span class="text-[9px] font-black uppercase text-zinc-500 tracking-widest">Restricted</span>
+<h4 class="text-xl font-bold">System Arch v2</h4>
+</div>
+</div>
 </div>
 </main>
-<!-- 3. DONO TERMINAL & MERITOCRACY (RIGHT) -->
-<aside class="w-80 border-l border-white/5 bg-[#0D1117] flex flex-col h-full z-20">
-<div class="p-10 flex flex-col items-center border-b border-white/5">
-<div class="w-24 h-24 relative mb-6">
-<div class="absolute inset-0 bg-blue-500/20 rounded-full blur-2xl dono-glow"></div>
-<div class="absolute inset-2 border-2 border-blue-500/30 rounded-full animate-[spin_12s_linear_infinite]"></div>
-<div class="absolute inset-0 flex items-center justify-center">
-<div class="w-6 h-6 bg-white rounded-sm rotate-45 shadow-[0_0_20px_white]"></div>
+<!-- 3. THE DONO TERMINAL (RIGHT COLUMN) -->
+<aside class="w-80 border-l border-white/5 bg-[#000000] flex flex-col h-full z-30">
+<!-- DONO CORE -->
+<div class="p-12 flex flex-col items-center">
+<div onclick="switchContext('DONO', 'DMs')" class="dono-iris w-20 h-20 bg-white rounded-sm rotate-45 flex items-center justify-center shadow-[0_0_40px_rgba(255,255,255,0.1)]">
+<div class="w-4 h-4 bg-black"></div>
 </div>
-</div>
-<h4 class="text-[10px] font-black tracking-[0.4em] text-blue-500 uppercase italic">DONO Partner v2.0</h4>
+<h4 class="text-[11px] font-black tracking-[0.5em] text-white uppercase mt-12">DONO</h4>
 </div>
 <!-- LEADERBOARD -->
-<div class="flex-1 p-8">
+<div class="flex-1 px-10">
 <div class="flex items-center justify-between mb-8">
-<div class="flex items-center gap-2">
-<i data-lucide="award" class="text-blue-500" size="16"></i>
-<p class="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Meritocracy</p>
+<p class="text-[9px] font-black text-zinc-700 uppercase tracking-widest">Leaderboard</p>
+<span class="w-1 h-1 bg-blue-500 rounded-full animate-pulse"></span>
 </div>
-<span class="text-[9px] font-bold text-zinc-700 uppercase">Live Audit</span>
+<div class="space-y-6">
+<div class="flex justify-between items-center text-[12px] font-medium group">
+<span class="text-zinc-600 font-bold tracking-widest mr-4">01</span>
+<span class="flex-1 text-zinc-400 group-hover:text-white transition-colors uppercase tracking-tighter">SeniorDev#4421</span>
+<span class="text-white font-black italic">1420</span>
 </div>
-<div id="leaderboard" class="space-y-6">
-<div class="flex items-center justify-between group cursor-default">
-<div class="flex items-center gap-4">
-<span class="text-xs font-black text-yellow-500">01</span>
-<span class="text-[11px] font-bold text-zinc-400 group-hover:text-white transition-colors">SeniorDev#4421</span>
+<div class="flex justify-between items-center text-[12px] font-medium">
+<span class="text-kb-orange font-bold tracking-widest mr-4">02</span>
+<span class="flex-1 text-white uppercase tracking-tighter">Gospel#7721</span>
+<span class="text-white font-black italic">1250</span>
 </div>
-<span class="text-[10px] font-mono text-blue-500 font-bold">1420</span>
-</div>
-<div class="flex items-center justify-between group cursor-default">
-<div class="flex items-center gap-4">
-<span class="text-xs font-black text-zinc-500">02</span>
-<span class="text-[11px] font-bold text-white">Gospel#7721</span>
-</div>
-<span class="text-[10px] font-mono text-blue-500 font-bold">1250</span>
-</div>
-<div class="flex items-center justify-between group cursor-default opacity-50">
-<div class="flex items-center gap-4">
-<span class="text-xs font-black text-amber-800">03</span>
-<span class="text-[11px] font-bold text-zinc-600">CPO#8892</span>
-</div>
-<span class="text-[10px] font-mono text-zinc-700 font-bold">940</span>
+<div class="flex justify-between items-center text-[12px] font-medium opacity-20">
+<span class="text-zinc-800 font-bold tracking-widest mr-4">03</span>
+<span class="flex-1 text-zinc-800 uppercase tracking-tighter">CPO#8892</span>
+<span class="text-zinc-800 font-black italic">940</span>
 </div>
 </div>
 </div>
-<div class="p-8 border-t border-white/5 bg-black/20">
-<div class="flex items-center justify-between mb-4">
-<span class="text-[9px] font-black text-zinc-500 uppercase tracking-widest">Firm Goal: Upskilling</span>
-<span class="text-[9px] font-black text-blue-500 uppercase tracking-widest">65%</span>
-</div>
-<div class="h-1 w-full bg-zinc-800 rounded-full overflow-hidden">
-<div class="h-full bg-blue-600 w-[65%] shadow-[0_0_15px_#2563eb]"></div>
+<!-- PROGRESS BAR -->
+<div class="p-10 bg-white/[0.02]">
+<p id="user-progress-text" class="text-[10px] font-medium text-zinc-500 mb-4 leading-relaxed">
+Gospel, you are <span class="text-white font-black italic">99%</span> away from upskilling.
+</p>
+<div class="h-[1px] w-full bg-zinc-900 overflow-hidden">
+<div class="h-full bg-white w-[1%]" />
 </div>
 </div>
 </aside>
 <script>
 lucide.createIcons();
-function switchContext(name, type) {
-// Update Header
+let isEditing = false;
+function toggleEditUsername() {
+const input = document.getElementById('username-input');
+const btn = document.getElementById('edit-btn');
+isEditing = !isEditing;
+if(isEditing) {
+input.disabled = false;
+input.focus();
+btn.innerHTML = `<i data-lucide="check" size="12"></i>`;
+input.classList.add('bg-zinc-900', 'px-2', 'py-1', 'rounded');
+} else {
+input.disabled = true;
+btn.innerHTML = `<i data-lucide="edit-3" size="12"></i>`;
+input.classList.remove('bg-zinc-900', 'px-2', 'py-1', 'rounded');
+updatePersonalProgress(input.value.split('#')[0]);
+}
+lucide.createIcons();
+}
+function updatePersonalProgress(name) {
+document.getElementById('user-progress-text').innerHTML = `${name}, you are <span class="text-white font-black italic">99%</span> away from upskilling.`;
+}
+function switchContext(name, category) {
+switchView('chat');
 document.getElementById('current-header').innerText = `# ${name}`;
-document.getElementById('header-tag').innerText = type === 'nexus' ? 'Project Cell' : 'Secure Private';
-// Update Sidebar Active State
-document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('sidebar-active'));
-document.getElementById(`nav-${name}`).classList.add('sidebar-active');
-// Clear or update chat for visual effect
-const feed = document.getElementById('chat-feed');
-feed.innerHTML = `<div class="max-w-3xl mx-auto opacity-10 text-center mt-40">
-<h4 class="text-4xl font-black italic tracking-tighter mb-2 uppercase">${name}</h4>
-<p class="text-xs uppercase tracking-[0.5em]">Session Initialized</p>
-</div>`;
+document.getElementById('view-indicator').innerText = category;
+document.getElementById('placeholder-text').innerText = name === 'DONO' ? 'Secure session with DONO active' : 'Call on DONO AI using @DONO';
+document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('nav-active'));
+const activeNav = document.getElementById(`nav-${name}`);
+if(activeNav) activeNav.classList.add('nav-active');
+}
+function switchView(view) {
+const chat = document.getElementById('chat-view');
+const upskill = document.getElementById('upskill-view');
+const navUpskill = document.getElementById('nav-Upskill');
+if(view === 'upskill') {
+chat.classList.add('hidden');
+upskill.classList.remove('hidden');
+document.getElementById('current-header').innerText = '# ACADEMY';
+document.getElementById('view-indicator').innerText = 'Upskill';
+navUpskill.classList.add('nav-active');
+} else {
+chat.classList.remove('hidden');
+upskill.classList.add('hidden');
+navUpskill.classList.remove('nav-active');
+}
 }
 function sendMessage() {
 const input = document.getElementById('chat-input');
-const feed = document.getElementById('chat-feed');
 if(!input.value) return;
-const msg = `
-<div class="flex gap-4 animate-fade-in">
-<div class="w-8 h-8 bg-blue-600 rounded-lg flex-shrink-0 flex items-center justify-center text-[10px] font-bold text-white italic">G</div>
-<div>
-<div class="flex items-center gap-2 mb-1">
-<span class="text-xs font-black text-white">Gospel#7721</span>
-<span class="text-[9px] text-zinc-600 font-bold uppercase">Just now</span>
-</div>
-<div class="bg-blue-600/10 p-4 rounded-2xl rounded-tl-none border border-blue-500/20 max-w-md text-sm leading-relaxed text-slate-200">
-${input.value}
-</div>
-</div>
+const feed = document.getElementById('chat-feed');
+// Clean message for the Apple look
+const msgHtml = `
+<div class="w-full max-w-xl animate-fade-in mb-8">
+<p class="text-[10px] font-black text-zinc-700 uppercase tracking-widest mb-2">${document.getElementById('username-input').value}</p>
+<p class="text-[14px] font-medium text-white leading-relaxed">${input.value}</p>
 </div>
 `;
-feed.innerHTML += msg;
-input.value = "";
+if(feed.classList.contains('justify-center')) {
+feed.classList.remove('justify-center', 'items-center');
+feed.innerHTML = '';
+}
+feed.innerHTML += msgHtml;
+input.value = '';
 feed.scrollTop = feed.scrollHeight;
-lucide.createIcons();
 }
 </script>
 </body>
